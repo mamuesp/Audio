@@ -381,8 +381,10 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		{"type":"AudioAnalyzeFFT256","data":{"defaults":{"name":{"value":"new"}},"shortName":"fft256","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioAnalyzeFFT1024","data":{"defaults":{"name":{"value":"new"}},"shortName":"fft1024","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioAnalyzeToneDetect","data":{"defaults":{"name":{"value":"new"}},"shortName":"tone","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
+		{"type":"AudioAnalyzeNoteFrequency","data":{"defaults":{"name":{"value":"new"}},"shortName":"notefreq","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioAnalyzePrint","data":{"defaults":{"name":{"value":"new"}},"shortName":"print","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioControlSGTL5000","data":{"defaults":{"name":{"value":"new"}},"shortName":"sgtl5000","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
+		{"type":"AudioControlAK4558","data":{"defaults":{"name":{"value":"new"}},"shortName":"ak4558","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioControlWM8731","data":{"defaults":{"name":{"value":"new"}},"shortName":"wm8731","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
 		{"type":"AudioControlWM8731master","data":{"defaults":{"name":{"value":"new"}},"shortName":"wm8731m","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}}
 	]}
@@ -1285,10 +1287,12 @@ The actual packets are taken
 		<ul>
 		<li><span class=literal>WAVEFORM_SINE</span></li>
 		<li><span class=literal>WAVEFORM_SAWTOOTH</span></li>
+		<li><span class=literal>WAVEFORM_SAWTOOTH_REVERSE</span></li>
 		<li><span class=literal>WAVEFORM_SQUARE</span></li>
 		<li><span class=literal>WAVEFORM_TRIANGLE</span></li>
 		<li><span class=literal>WAVEFORM_ARBITRARY</span></li>
 		<li><span class=literal>WAVEFORM_PULSE</span></li>
+		<li><span class=literal>WAVEFORM_SAMPLE_HOLD</span></li>
 		</ul>
 	</p>
 </script>
@@ -2283,6 +2287,61 @@ double s_freq = .0625;</p>
 	</div>
 </script>
 
+<script type="text/x-red" data-help-name="AudioAnalyzeNoteFrequency">
+	<h3>Summary</h3>
+	<p>Detect with fairly good accuracy the fundamental frequency f<sub>o</sub>
+		of musical notes, such as electric guitar and bass.</p>
+    <p>Written By Collin Duffy</p>
+	<h3>Audio Connections</h3>
+	<table class=doc align=center cellpadding=3>
+		<tr class=top><th>Port</th><th>Purpose</th></tr>
+		<tr class=odd><td align=center>In 0</td><td>Signal to analyze</td></tr>
+	</table>
+	<h3>Functions</h3>
+	<p class=func><span class=keyword>begin</span>(threshold);</p>
+	<p class=desc>Initialize and start detecting frequencies,
+		with an initial threshold (the amount of allowed uncertainty).
+	</p>
+	<p class=func><span class=keyword>available</span>();</p>
+	<p class=desc>Returns true (non-zero) when a valid
+		frequency is detected.
+	</p>
+	<p class=func><span class=keyword>read</span>();</p>
+	<p class=desc>Read the detected frequency.
+	</p>
+	<p class=func><span class=keyword>probability</span>();</p>
+	<p class=desc>Return the level of certainty, betweeo 0 to 1.0.
+	</p>
+	<p class=func><span class=keyword>threshold</span>(level);</p>
+	<p class=desc>Set the detection threshold, the amount of allowed uncertainty.
+	</p>
+	<h3>Examples</h3>
+	<p class=exam>File &gt; Examples &gt; Audio &gt; Analysis &gt; NoteFrequency
+	</p>
+	<h3>Notes</h3>
+	<p>The <a href="http://recherche.ircam.fr/equipes/pcm/cheveign/pss/2002_JASA_YIN.pdf">YIN algorithm</a> (PDF)
+		is used to detect frequencies, with many optimizations for
+		frequencies between 29-400Hz.  This algorithm can be somewhat
+		memory and processor hungry but will allow you to detect with
+		fairly good accuracy the fundamental frequencies from
+		electric guitars and basses.</p>
+	<p>Within the code, AUDIO_GUITARTUNER_BLOCKS
+		may be edited to control low frequency range.  The default
+		(24) allows measurement down to 29.14 Hz, or B(flat)0.</p>
+	<p>TODO: The usable upper range of this object is not well known.
+		Duff says "it should be good up to 1000Hz", but may have trouble
+		at 4 kHz.  Please <a href="https://forum.pjrc.com/threads/32252-Different-Range-FFT-Algorithm/page2">post feedback here</a>, ideally with audio clips for the NoteFrequency example.</p>
+	<p>This object was contributed by Collin Duffy from his
+		<a href="https://github.com/duff2013/AudioTuner">AudioTuner project</a>.
+		Additional details and documentation may be found there.</p>
+</script>
+<script type="text/x-red" data-template-name="AudioAnalyzeNoteFrequency">
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+		<input type="text" id="node-input-name" placeholder="Name">
+	</div>
+</script>
+
 <script type="text/x-red" data-help-name="AudioAnalyzePrint">
 	<h3>Summary</h3>
 	<p>Print raw audio data to the Arduino Serial Monitor.  This
@@ -2726,6 +2785,65 @@ value  frequency
 	</p>
 	<h3>Notes</h3>
 	<p></p>
+</script>
+<script type="text/x-red" data-template-name="AudioControlWM8731master">
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+		<input type="text" id="node-input-name" placeholder="Name">
+	</div>
+</script>
+
+<script type="text/x-red" data-help-name="AudioControlAK4558">
+	<h3>Summary</h3>
+	<p>Control the AK4558 chip on the <a href="https://hackaday.io/project/8567-hifi-audio-codec-module" target="_blank">HiFi Audio CODEC Module</a> 
+	in slave mode, where the Teensy controls all I2S timing.</p>
+	<h3>Audio Connections</h3>
+	<p>This object has no audio inputs or outputs.  Separate I2S objects
+		are used to send and receive audio data.
+	</p>
+	<h3>Functions</h3>
+	<p class=func><span class=keyword>enable</span>();</p>
+	<p class=desc>Enables the CODEC to work with 44.1 KHz - 16 bit data. This function does not enable the ADC/DAC modules.
+	</p>
+	<p class=func><span class=keyword>enableIn</span>();</p>
+	<p class=desc>Enables the ADC module.
+	</p>
+	<p class=func><span class=keyword>enableOut</span>();</p>
+	<p class=desc>Enables the DAC module.
+	</p>
+	<p class=func><span class=keyword>disable</span>();</p>
+	<p class=desc>Disables the ADC and the DAC modules.
+	</p>
+	<p class=func><span class=keyword>disableIn</span>();</p>
+	<p class=desc>Disable the ADC module.
+	</p>
+	<p class=func><span class=keyword>disableOut</span>();</p>
+	<p class=desc>Disable the DAC module.
+	</p>
+	<p class=func><span class=keyword>volume</span>(level);</p>
+	<p class=desc>Accepts a float in range 0.0-1.0 and sets the line output volume accordingly.
+	</p>
+	<p class=func><span class=keyword>volumeLeft</span>(level);</p>
+	<p class=desc>Accepts a float in range 0.0-1.0 and sets the left line output volume accordingly.
+	</p>
+	<p class=func><span class=keyword>volumeRight</span>(level);</p>
+	<p class=desc>Accepts a float in range 0.0-1.0 and sets the right line output volume accordingly.
+	</p>
+	<p class=func><span class=keyword>inputLevel</span>(level);</p>
+	<p class=desc>NOT SUPPORTED BY THE AK4558
+	</p>
+	<p class=func><span class=keyword>inputSelect</span>(input);</p>
+	<p class=desc>not implemented yet
+	</p>
+	<h3>Examples</h3>
+	<p class=exam>File &gt; Examples &gt; Audio &gt; HardwareTesting &gt; AK4558 &gt; PassthroughTest
+	</p>
+	<p class=exam>File &gt; Examples &gt; Audio &gt; HardwareTesting &gt; AK4558 &gt; SineOutTest
+	</p>
+	<h3>Notes</h3>
+	<p>TODO: Implement inputSelect() function to enable mono left, mono right, stereo operation.</p>
+	<p>TODO: Implement ADC and DAC filters control.</p>
+	<p>TODO: Implement DAC level attenuator attack rate modifier.</p>
 </script>
 <script type="text/x-red" data-template-name="AudioControlWM8731master">
 	<div class="form-row">
