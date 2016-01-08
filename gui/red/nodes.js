@@ -94,8 +94,6 @@ RED.nodes = (function() {
 		// but other than errors in the console, doesn't seem to harm anything
 		window.history.pushState(null, null, window.location.protocol + "//"
 			+ window.location.host + window.location.pathname + '?info=' + name);
-		window.history.pushState(null, null, window.location.protocol + "//"
-			+ window.location.host + window.location.pathname + '?info=' + name);
 	}
 	function addNode(n) {
 		if (n._def.category == "config") {
