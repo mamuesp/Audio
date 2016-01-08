@@ -24,30 +24,30 @@
   limitations under the License.
 -->
 <head>
-<title>Audio System Design Tool for Teensy Audio Library</title>
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="jquery/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" type="text/css" href="orion/built-editor.css"/>
-<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css"/>
-<link rel="stylesheet" href="style.css">
-<style>
-table.doc {border-spacing:3px; border-collapse:separate; font-size: 80%}
-tr.top {background-color:#C0C0C0}
-tr.odd {background-color:#F0F0F0}
-tr.even {background-color:#E0E0E0}
-p.func {padding-bottom:0; margin:0px}
-p.desc {padding-left:2em; margin:0px; padding-top:0.2em; padding-bottom:0.8em; font-size:0.75em}
-p.exam {padding-left:2em; text-indent:-1.2em; margin:0px; padding-top:0; padding-bottom:0.5em; font-size:0.75em; font-weight:bold}
-pre.desc {padding-left:3em; margin:0px; padding-top:0em; padding-bottom:0.8em; font-size:0.75em;
-	background-color:#FFFFFF; border:0px; line-height:100%;
-}
-span.indent {padding-left:2em}
-span.literal {color: #006699}
-span.comment {color: #777755}
-span.keyword {color: #cc6600}
-span.function {color: #996600}
-span.mainfunction {color: #993300; font-weight: bolder}
-</style>
+	<title>Audio System Design Tool for Teensy Audio Library</title>
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="jquery/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" type="text/css" href="orion/built-editor.css"/>
+	<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="style.css">
+	<style>
+		table.doc {border-spacing:3px; border-collapse:separate; font-size: 80%}
+		tr.top {background-color:#C0C0C0}
+		tr.odd {background-color:#F0F0F0}
+		tr.even {background-color:#E0E0E0}
+		p.func {padding-bottom:0; margin:0px}
+		p.desc {padding-left:2em; margin:0px; padding-top:0.2em; padding-bottom:0.8em; font-size:0.75em}
+		p.exam {padding-left:2em; text-indent:-1.2em; margin:0px; padding-top:0; padding-bottom:0.5em; font-size:0.75em; font-weight:bold}
+		pre.desc {padding-left:3em; margin:0px; padding-top:0em; padding-bottom:0.8em; font-size:0.75em;
+			background-color:#FFFFFF; border:0px; line-height:100%;
+		}
+		span.indent {padding-left:2em}
+		span.literal {color: #006699}
+		span.comment {color: #777755}
+		span.keyword {color: #cc6600}
+		span.function {color: #996600}
+		span.mainfunction {color: #993300; font-weight: bolder}
+	</style>
 </head>
 <body spellcheck="false">
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -163,74 +163,72 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		</div>
 	</form>
 </div>
-
 <div id="node-dialog-error-deploy" class="hide">
 	<form class="form-horizontal">
 		<div id="node-dialog-error-deploy-noio" style="text-align: center; padding-top: 10px;">
 			<p>The workspace contains no input/output nodes!</p>
 			<p>You need an input or an output to export the data!</p>
 			<p>Without such a input/output function the exported
-			code will not run properly!</p>
+				code will not run properly!</p>
 		</div>
 	</form>
 </div>
 
 <div id="node-help" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="node-help-label" aria-hidden="true">
-  <div class="modal-header">
-	<h5 id="node-help-label">Keyboard Shortcuts <span style="float: right;"><a href="http://node-red.github.io/docs" target="_blank">Open help in new window &raquo;</a></span></h5>
-  </div>
-  <div class="modal-body">
-	<table>
-		<tr>
-		  <td><span class="help-key">?</span></td><td>Help</td>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">a</span></td><td>Select all nodes</td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">Space</span></td><td>Toggle sidebar</td>
-		  <td><span class="help-key">Shift</span> <span class="help-key">Click</span></td><td>Select all connected nodes</td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">z</span></td><td>Undo</td>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">Click</span></td><td>Add/remove node from selection</td>
-		</tr>
-		<tr>
-		  <td></td><td></td>
-		  <td><span class="help-key">Delete</span></td><td>Delete selected nodes or link</td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">x</span></td><td>Cut selected nodes</td>
-		  <td></td><td></td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">c</span></td><td>Copy selected nodes</td>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">v</span></td><td>Paste nodes</td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">i</span></td><td>Import nodes</td>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">e</span></td><td>Export selected nodes</td>
-		</tr>
-		<tr>
-		  <td colspan="2"></td>
-		</tr>
-		<tr>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">+</span></td><td>Zoom in</td>
-		  <td><span class="help-key">Ctrl</span> <span class="help-key">-</span></td><td>Zoom out</td>
-		</tr>
-	</table>
-  </div>
-  <div class="modal-footer">
-	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-  </div>
+	<div class="modal-header">
+		<h5 id="node-help-label">Keyboard Shortcuts <span style="float: right;"><a href="http://node-red.github.io/docs" target="_blank">Open help in new window &raquo;</a></span></h5>
+	</div>
+	<div class="modal-body">
+		<table>
+			<tr>
+				<td><span class="help-key">?</span></td><td>Help</td>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">a</span></td><td>Select all nodes</td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">Space</span></td><td>Toggle sidebar</td>
+				<td><span class="help-key">Shift</span> <span class="help-key">Click</span></td><td>Select all connected nodes</td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">z</span></td><td>Undo</td>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">Click</span></td><td>Add/remove node from selection</td>
+			</tr>
+			<tr>
+				<td></td><td></td>
+				<td><span class="help-key">Delete</span></td><td>Delete selected nodes or link</td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">x</span></td><td>Cut selected nodes</td>
+				<td></td><td></td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">c</span></td><td>Copy selected nodes</td>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">v</span></td><td>Paste nodes</td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">i</span></td><td>Import nodes</td>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">e</span></td><td>Export selected nodes</td>
+			</tr>
+			<tr>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">+</span></td><td>Zoom in</td>
+				<td><span class="help-key">Ctrl</span> <span class="help-key">-</span></td><td>Zoom out</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	</div>
 </div>
 
 <div id="node-dialog-library-save-confirm" class="hide">
 	<form class="form-horizontal">
 		<div style="text-align: center; padding-top: 30px;">
-		 A <span id="node-dialog-library-save-type"></span> called <span id="node-dialog-library-save-name"></span> already exists. Overwrite?
+			A <span id="node-dialog-library-save-type"></span> called <span id="node-dialog-library-save-name"></span> already exists. Overwrite?
 		</div>
 	</form>
 </div>
-
 <div id="node-dialog-library-save" class="hide">
 	<form class="form-horizontal">
 		<div class="form-row">
@@ -243,7 +241,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		</div>
 	</form>
 </div>
-
 <div id="node-dialog-library-lookup" class="hide">
 	<form class="form-horizontal">
 		<div class="form-row">
@@ -272,14 +269,14 @@ span.mainfunction {color: #993300; font-weight: bolder}
 <div id="node-dialog-delete-workspace" class="hide">
 	<form class="form-horizontal">
 		<div style="text-align: center; padding-top: 30px;">
-		 Are you sure you want to delete '<span id="node-dialog-delete-workspace-name"></span>'?
+			Are you sure you want to delete '<span id="node-dialog-delete-workspace-name"></span>'?
 		</div>
 	</form>
 </div>
 
 <script type="text/x-red" data-template-name="export-clipboard-dialog">
 	<div class="form-row">
-		<label for="node-input-export" style="display: block; width:100%;"><i class="icon-share"></i> Source Code:</label>
+		<label for="node-input-export" style="vertical-align: top;"><i class="icon-share"></i> Source Code:</label>
 		<textarea readonly style="font-family: monospace; font-size: 12px; background:rgb(226, 229, 255); padding-left: 0.5em;" class="input-block-level" id="node-input-export" rows="12"></textarea>
 	</div>
 	<div class="form-tips">
@@ -295,13 +292,15 @@ span.mainfunction {color: #993300; font-weight: bolder}
 <script type="text/x-red" data-template-name="import-dialog">
 	<div class="form-row">
 		<label for="node-input-import"><i class="icon-share"></i>Nodes:</label>
-		<textarea style="font-family: monospace; font-size: 12px; background:rgb(226, 229, 255); padding-left: 0.5em;" class="input-block-level" id="node-input-import" rows="5" placeholder="Paste nodes here, or lookup in the library. When importing Arduino code, the whole flow will be replaced."></textarea>
+		<textarea style="font-family: monospace; font-size: 12px; background:rgb(226, 229, 255); padding-left: 0.5em;" class="input-block-level" id="node-input-import" rows="15" placeholder="Paste nodes here, or lookup in the library. When importing Arduino code, the whole flow will be replaced."></textarea>
 	</div>
+	<div class="form-row">
 	<div class="form-tips">
-		<label for="node-input-arduino" style="font-size: 13px; padding: 2px 0px 0px 4px;">
-			<input style="margin-bottom: 4px; margin-right: 4px;" type="checkbox" id="node-input-arduino" checked="checked" class="input-block-level" />
-				&nbsp;Import copied code from the Arduino IDE
+			<label for="node-input-arduino" style="font-size: 13px; padding: 2px 0px 0px 4px; width: auto;">
+				<input style="margin: 4px;" type="checkbox" id="node-input-arduino" checked="checked" class="input-block-level" />
+				Import copied code from the Arduino IDE
 		</label>
+	</div>
 	</div>
 </script>
 
@@ -309,6 +308,7 @@ span.mainfunction {color: #993300; font-weight: bolder}
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="jquery/js/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="jquery/js/jquery.ui.touch-punch.min.js"></script>
+<script src="jquery/js/JSONfn.js"></script>
 <script src="orion/built-editor.min.js"></script>
 <script src="red/d3/d3.v3.min.js"></script>
 <script src="red/main.js"></script>
@@ -328,10 +328,779 @@ span.mainfunction {color: #993300; font-weight: bolder}
 <script src="red/ui/notifications.js"></script>
 <script src="red/ui/touch/radialMenu.js"></script>
 
+<script type="text/javascript" data-template-name="node definitions">
+	var nodes = {
+		"AudioInputI2S":                   {
+			"type": "AudioInputI2S",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "i2s"
+					}
+				},
+				"shortName": "i2s",
+				"inputs":    0,
+				"outputs":   2,
+				"category":  "input-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioInputAnalog":                {
+			"type": "AudioInputAnalog",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "adc"
+					},
+					"pin":  {
+						"value": "A2",
+						"call":  "(###pin###)",
+                        "input": "text",
+                        "label": "Pin"
+					}
+				},
+				"shortName": "adc",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "input-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioInputI2Sslave":              {
+			"type": "AudioInputI2Sslave",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "i2ss",
+				"inputs":    0,
+				"outputs":   2,
+				"category":  "input-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioOutputI2S":                  {
+			"type": "AudioOutputI2S",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "i2s",
+				"inputs":    2,
+				"outputs":   0,
+				"category":  "output-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioOutputSPDIF":                {
+			"type": "AudioOutputSPDIF",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "spdif",
+				"inputs":    2,
+				"outputs":   0,
+				"category":  "output-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioOutputAnalog":               {
+			"type": "AudioOutputAnalog",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "dac"
+					}
+				},
+				"shortName": "dac",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "output-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioOutputPWM":                  {
+			"type": "AudioOutputPWM",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "pwm",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "output-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioOutputI2Sslave":             {
+			"type": "AudioOutputI2Sslave",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "i2ss",
+				"inputs":    2,
+				"outputs":   0,
+				"category":  "output-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioMixer4":                     {
+			"type": "AudioMixer4",
+			"data": {
+				"defaults":  {
+					"name":  {
+						"value": "mixer"
+					},
+					"gain0": {
+						"value":    0.25,
+						"call":     ".gain(0, ###gain0###)",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0.0,
+                        "max":      1.0,
+                        "input":    "text",
+                        "label":    "Gain chan. 0"
+                    },
+					"gain1": {
+						"value": 0.25,
+						"call":  ".gain(1, ###gain1###)",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0.0,
+                        "max":      1.0,
+                        "input":    "text",
+                        "label":    "Gain chan. 1"
+					},
+					"gain2": {
+						"value": 0.25,
+						"call":  ".gain(2, ###gain2###)",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0.0,
+                        "max":      1.0,
+                        "input":     "text",
+                        "label":    "Gain chan. 2"
+					},
+					"gain3": {
+						"value": 0.25,
+						"call":  ".gain(3, ###gain3###)",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0.0,
+                        "max":      1.0,
+                        "input":    "text",
+                        "label":    "Gain chan. 3"
+					}
+				},
+				"shortName": "mixer",
+				"inputs":    4,
+				"outputs":   1,
+				"category":  "mixer-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioPlayMemory":                 {
+			"type": "AudioPlayMemory",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "playMem",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "play-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioPlaySdWav":                  {
+			"type": "AudioPlaySdWav",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "playSdWav",
+				"inputs":    0,
+				"outputs":   2,
+				"category":  "play-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioPlaySdRaw":                  {
+			"type": "AudioPlaySdRaw",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "playSdRaw",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "play-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioPlaySerialflashRaw":         {
+			"type": "AudioPlaySerialflashRaw",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "playFlashRaw",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "play-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioPlayQueue":                  {
+			"type": "AudioPlayQueue",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "queue",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "play-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioRecordQueue":                {
+			"type": "AudioRecordQueue",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "queue",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "record-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthWaveformSine":          {
+			"type": "AudioSynthWaveformSine",
+			"data": {
+				"defaults":  {
+					"name":      {
+						"value": "sine"
+					},
+					"amplitude": {
+						"value":    "0.5",
+						"validate": RED.nodes.isValidRange,
+						"min":      0,
+						"max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+					},
+					"frequency": {
+						"value": "1000",
+						"validate": RED.nodes.isValidRange,
+						"min":      0,
+						"max":      22000,
+                        "input":     "text",
+                        "label":    "Frequency"
+					},
+					"phase":     {
+						"value": "0",
+						"validate": RED.nodes.isValidRange,
+						"min":      0,
+						"max":      360,
+                        "input":     "text",
+                        "label":    "Phase"
+                    }
+				},
+				"shortName": "sine",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthWaveformSineModulated": {
+			"type": "AudioSynthWaveformSineModulated",
+			"data": {
+				"defaults":  {
+					"name":      {
+						"value": "sine_fm"
+					},
+                    "amplitude": {
+                        "value":    "0.5",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+                    },
+                    "frequency": {
+                        "value": "1000",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      22000,
+                        "input":     "text",
+                        "label":    "Frequency"
+                    },
+                    "phase":     {
+                        "value": "0",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      360,
+                        "input":     "text",
+                        "label":    "Phase"
+                    }
+				},
+				"shortName": "sine_fm",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthWaveform":              {
+			"type": "AudioSynthWaveform",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "new"
+					},
+                    "waveform": {
+                        "value": 0,
+                        "data": ["WAVEFORM_SINE","WAVEFORM_SAWTOOTH","WAVEFORM_SAWTOOTH_REVERSE","WAVEFORM_SQUARE","WAVEFORM_TRIANGLE","WAVEFORM_ARBITRARY","WAVEFORM_PULSE","WAVEFORM_SAMPLE_HOLD"],
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      7,
+                        "input":    "select",
+                        "label":    "Waveform"
+                    },
+                    "amplitude": {
+                        "value":    "0.5",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+                    },
+                    "frequency": {
+                        "value": "1000",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      22000,
+                        "input":     "text",
+                        "label":    "Frequency"
+                    },
+                    "phase":     {
+                        "value": "0",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      360,
+                        "input":     "text",
+                        "label":    "Phase"
+                    }
+				},
+				"shortName": "waveform",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthToneSweep":             {
+			"type": "AudioSynthToneSweep",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "tonesweep",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthWaveformDc":            {
+			"type": "AudioSynthWaveformDc",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "new"
+					},
+                    "amplitude": {
+                        "value":    "0.5",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+                    },
+                    "period": {
+                        "value": "10",
+                        "call":  "insert",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      100000,
+                        "input":     "text",
+                        "label":    "Period"
+                    }
+				},
+				"shortName": "dc",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthNoiseWhite":            {
+			"type": "AudioSynthNoiseWhite",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "new"
+					},
+                    "amplitude": {
+                        "value":    "0.5",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+                    }
+				},
+				"shortName": "noise",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSynthNoisePink":             {
+			"type": "AudioSynthNoisePink",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "new"
+					},
+                    "amplitude": {
+                        "value":    "0.5",
+                        "validate": RED.nodes.isValidRange,
+                        "min":      0,
+                        "max":      1,
+                        "input":     "text",
+                        "label":    "Amplitude"
+                    }
+				},
+				"shortName": "pink",
+				"inputs":    0,
+				"outputs":   1,
+				"category":  "synth-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectFade":                 {
+			"type": "AudioEffectFade",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "fade",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectChorus":               {
+			"type": "AudioEffectChorus",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "chorus",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectFlange":               {
+			"type": "AudioEffectFlange",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "flange",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectEnvelope":             {
+			"type": "AudioEffectEnvelope",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "envelope",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectMultiply":             {
+			"type": "AudioEffectMultiply",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "multiply",
+				"inputs":    2,
+				"outputs":   1,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectDelay":                {
+			"type": "AudioEffectDelay",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "delay",
+				"inputs":    1,
+				"outputs":   8,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectDelayExternal":        {
+			"type": "AudioEffectDelayExternal",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "delayExt",
+				"inputs":    1,
+				"outputs":   8,
+				"category":  "effect-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioEffectBitcrusher":           {
+			"type": "AudioEffectBitcrusher",
+			"data": {
+                "defaults":  {"name": {"value": "new"}},
+                "shortName": "bitcrusher",
+                "inputs": 1,
+                "outputs": 1,
+                "category": "effect-function",
+                "color": "#E6E0F8",
+                "icon": "arrow-in.png"
+            }
+		},
+		"AudioFilterBiquad":               {
+			"type": "AudioFilterBiquad",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "biquad",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "filter-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioFilterFIR":                  {
+			"type": "AudioFilterFIR",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "fir",
+				"inputs":    1,
+				"outputs":   1,
+				"category":  "filter-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioFilterStateVariable":        {
+			"type": "AudioFilterStateVariable",
+			"data": {
+				"defaults":  {
+					"name":          {
+						"value": "new"
+					},
+					"frequency":     {
+						"value": 0
+					},
+					"resonance":     {
+						"value": 0
+					},
+					"octaveControl": {
+						"value": 0
+					}
+				},
+				"shortName": "filter",
+				"inputs":    2,
+				"outputs":   3,
+				"category":  "filter-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioAnalyzePeak":                {
+			"type": "AudioAnalyzePeak",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "peak",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "analyze-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioAnalyzeFFT256":              {
+			"type": "AudioAnalyzeFFT256",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "fft256",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "analyze-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioAnalyzeFFT1024":             {
+			"type": "AudioAnalyzeFFT1024",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "fft1024",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "analyze-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioAnalyzeToneDetect":          {
+			"type": "AudioAnalyzeToneDetect",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "tone",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "analyze-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioAnalyzePrint":               {
+			"type": "AudioAnalyzePrint",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "print",
+				"inputs":    1,
+				"outputs":   0,
+				"category":  "analyze-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioControlSGTL5000":            {
+			"type": "AudioControlSGTL5000",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "sgtl5000",
+				"inputs":    0,
+				"outputs":   0,
+				"category":  "control-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioControlAK4558":              {
+			"type": "AudioControlAK4558",
+			"data": {
+				"defaults":    {
+					"name": {
+						"value": "new"
+					},
+					"volume":      {
+						"value":    0.25,
+						"validate": RED.nodes.isValidRange,
+						"min":      0.0,
+						"max":      1.0,
+                        "input":     "text",
+                        "label":     "Volume"
+					},
+					"volumeLeft":  {
+						"value":    0.25,
+						"validate": RED.nodes.isValidRange,
+						"min":      0.0,
+						"max":      1.0,
+                        "input":     "text",
+                        "label":     "Left volume"
+					},
+					"volumeRight": {
+						"value":    0.25,
+						"validate": RED.nodes.isValidRange,
+						"min":      0.0,
+						"max":      1.0,
+                        "input":     "text",
+                        "label":     "Right volume"
+					},
+					"inputSelect": {
+						"value":    "n.a.",
+                        "input":    "display",
+                        "label":    "Input select"
+					}
+				},
+				"shortName": "ak4558",
+				"inputs":    0,
+				"outputs":   0,
+				"category":  "control-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioControlWM8731":              {
+			"type": "AudioControlWM8731",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "wm8731",
+				"inputs":    0,
+				"outputs":   0,
+				"category":  "control-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioControlWM8731master":        {
+			"type": "AudioControlWM8731master",
+			"data": {
+				"defaults":  {"name": {"value": "new"}},
+				"shortName": "wm8731m",
+				"inputs":    0,
+				"outputs":   0,
+				"category":  "control-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		},
+		"AudioSourceLoopContainer":        {
+			"type": "AudioSourceLoopContainer",
+			"data": {
+				"defaults":  {
+					"name": {
+						"value": "loop"
+					},
+					"code": {
+						"value": "void loop() {\n\n\n}\n"
+					}
+				},
+				"shortName": "loop",
+				"inputs":    0,
+				"outputs":   0,
+				"category":  "source-function",
+				"color":     "#E6E0F8",
+				"icon":      "arrow-in.png"
+			}
+		}
+	};
+</script>
+
 <!--
  TODO: generate some or all of this automatically from the C++ source
 -->
-
 <!--
  TODO: add a field for maximum instance count
 -->
@@ -342,52 +1111,19 @@ span.mainfunction {color: #993300; font-weight: bolder}
  TODO: add "parameters" fields, to replace the form html stuff
 -->
 
-<script  type="text/x-red" data-container-name="NodeDefinitions">
-	{"nodes":[
-		{"type":"AudioInputI2S","data":{"defaults":{"name":{"value":"new"}},"shortName":"i2s","inputs":0,"outputs":2,"category":"input-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioInputAnalog","data":{"defaults":{"name":{"value":"new"}},"shortName":"adc","inputs":0,"outputs":1,"category":"input-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioInputI2Sslave","data":{"defaults":{"name":{"value":"new"}},"shortName":"i2ss","inputs":0,"outputs":2,"category":"input-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioOutputI2S","data":{"defaults":{"name":{"value":"new"}},"shortName":"i2s","inputs":2,"outputs":0,"category":"output-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioOutputSPDIF","data":{"defaults":{"name":{"value":"new"}},"shortName":"spdif","inputs":2,"outputs":0,"category":"output-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioOutputAnalog","data":{"defaults":{"name":{"value":"new"}},"shortName":"dac","inputs":1,"outputs":0,"category":"output-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioOutputPWM","data":{"defaults":{"name":{"value":"new"}},"shortName":"pwm","inputs":1,"outputs":0,"category":"output-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioOutputI2Sslave","data":{"defaults":{"name":{"value":"new"}},"shortName":"i2ss","inputs":2,"outputs":0,"category":"output-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioMixer4","data":{"defaults":{"name":{"value":"new"}},"shortName":"mixer","inputs":4,"outputs":1,"category":"mixer-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioPlayMemory","data":{"defaults":{"name":{"value":"new"}},"shortName":"playMem","inputs":0,"outputs":1,"category":"play-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioPlaySdWav","data":{"defaults":{"name":{"value":"new"}},"shortName":"playSdWav","inputs":0,"outputs":2,"category":"play-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioPlaySdRaw","data":{"defaults":{"name":{"value":"new"}},"shortName":"playSdRaw","inputs":0,"outputs":1,"category":"play-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioPlaySerialflashRaw","data":{"defaults":{"name":{"value":"new"}},"shortName":"playFlashRaw","inputs":0,"outputs":1,"category":"play-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioPlayQueue","data":{"defaults":{"name":{"value":"new"}},"shortName":"queue","inputs":0,"outputs":1,"category":"play-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioRecordQueue","data":{"defaults":{"name":{"value":"new"}},"shortName":"queue","inputs":1,"outputs":0,"category":"record-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthWaveformSine","data":{"defaults":{"name":{"value":"new"}},"shortName":"sine","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthWaveformSineModulated","data":{"defaults":{"name":{"value":"new"}},"shortName":"sine_fm","inputs":1,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthWaveform","data":{"defaults":{"name":{"value":"new"}},"shortName":"waveform","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthToneSweep","data":{"defaults":{"name":{"value":"new"}},"shortName":"tonesweep","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthWaveformDc","data":{"defaults":{"name":{"value":"new"}},"shortName":"dc","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthNoiseWhite","data":{"defaults":{"name":{"value":"new"}},"shortName":"noise","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioSynthNoisePink","data":{"defaults":{"name":{"value":"new"}},"shortName":"pink","inputs":0,"outputs":1,"category":"synth-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectFade","data":{"defaults":{"name":{"value":"new"}},"shortName":"fade","inputs":1,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectChorus","data":{"defaults":{"name":{"value":"new"}},"shortName":"chorus","inputs":1,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectFlange","data":{"defaults":{"name":{"value":"new"}},"shortName":"flange","inputs":1,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectEnvelope","data":{"defaults":{"name":{"value":"new"}},"shortName":"envelope","inputs":1,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectMultiply","data":{"defaults":{"name":{"value":"new"}},"shortName":"multiply","inputs":2,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectDelay","data":{"defaults":{"name":{"value":"new"}},"shortName":"delay","inputs":1,"outputs":8,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectDelayExternal","data":{"defaults":{"name":{"value":"new"}},"shortName":"delayExt","inputs":1,"outputs":8,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioEffectBitcrusher","data":{"shortName":"bitcrusher","inputs":1,"outputs":1,"category":"effect-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioFilterBiquad","data":{"defaults":{"name":{"value":"new"}},"shortName":"biquad","inputs":1,"outputs":1,"category":"filter-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioFilterFIR","data":{"defaults":{"name":{"value":"new"}},"shortName":"fir","inputs":1,"outputs":1,"category":"filter-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioFilterStateVariable","data":{"defaults":{"name":{"value":"new"}},"shortName":"filter","inputs":2,"outputs":3,"category":"filter-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzePeak","data":{"defaults":{"name":{"value":"new"}},"shortName":"peak","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzeFFT256","data":{"defaults":{"name":{"value":"new"}},"shortName":"fft256","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzeFFT1024","data":{"defaults":{"name":{"value":"new"}},"shortName":"fft1024","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzeToneDetect","data":{"defaults":{"name":{"value":"new"}},"shortName":"tone","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzeNoteFrequency","data":{"defaults":{"name":{"value":"new"}},"shortName":"notefreq","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioAnalyzePrint","data":{"defaults":{"name":{"value":"new"}},"shortName":"print","inputs":1,"outputs":0,"category":"analyze-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioControlSGTL5000","data":{"defaults":{"name":{"value":"new"}},"shortName":"sgtl5000","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioControlAK4558","data":{"defaults":{"name":{"value":"new"}},"shortName":"ak4558","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioControlWM8731","data":{"defaults":{"name":{"value":"new"}},"shortName":"wm8731","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}},
-		{"type":"AudioControlWM8731master","data":{"defaults":{"name":{"value":"new"}},"shortName":"wm8731m","inputs":0,"outputs":0,"category":"control-function","color":"#E6E0F8","icon":"arrow-in.png"}}
-	]}
+<script type="text/x-red" data-template-name="AudioDefault">
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+		<input type="text" id="node-input-name" placeholder="Name">
+	</div>
+</script>
+<script type="text/x-red" data-template-name="AudioDefaultParameter">
+    <label for="node-input-###prop###"><i class="fa fa-tag"></i> ###label###</label>
+    <input type="text" id="node-input-###prop###" placeholder="Enter value here">
+</script>
+<script type="text/x-red" data-template-name="AudioSelectParameter">
+    <label for="node-input-###prop###"><i class="fa fa-tag"></i> ###label###</label>
+    <select id="node-input-###prop###">###OPTIONS###</select>
 </script>
 
 <script type="text/x-red" data-help-name="AudioInputI2S">
@@ -447,12 +1183,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>I2S master objects can be used together with non-I2S input and output
 		objects, for simultaneous audio streaming on different hardware.</p>
 </script>
-<script type="text/x-red" data-template-name="AudioInputI2S">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioInputAnalog">
 	<h3>Summary</h3>
@@ -492,12 +1222,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>TODO: actual noise measurements with different input circuitry
 		(it's not as quiet as the audio shield)</p>
 </script>
-<script type="text/x-red" data-template-name="AudioInputAnalog">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioInputI2Sslave">
 	<h3>Summary</h3>
@@ -534,12 +1258,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>Only one I2S input and one I2S output object may be used.  Master
 		and slave modes may not be mixed (both must be of the same type).
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioInputI2Sslave">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioOutputI2S">
@@ -592,12 +1310,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		and slave modes may not be mixed (both must be of the same type).
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioOutputI2S">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioOutputSPDIF">
 	<h3>Summary</h3>
@@ -643,12 +1355,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		hardware with different internal settings.</p>
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioOutputSPDIF">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioOutputAnalog">
 	<h3>Summary</h3>
@@ -676,12 +1382,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		not filtered.  This may not
 		be an issue for many uses, but care should be used if amplified and driven
 		to high power tweeters.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioOutputAnalog">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioOutputPWM">
@@ -725,12 +1425,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		<a href="http://www.pjrc.com/store/teensy3_audio.html" target="_blank">audio shield</a>
 		should be used when higher quality signals are needed.</p>
 </script>
-<script type="text/x-red" data-template-name="AudioOutputPWM">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioOutputI2Sslave">
 	<h3>Summary</h3>
@@ -765,12 +1459,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>Only one I2S input and one I2S output object may be used.  Master
 		and slave modes may not be mixed (both must be of the same type).
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioOutputI2Sslave">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioMixer4">
@@ -812,12 +1500,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		in tandem.  For example, a 16 channel mixer may be built using 5
 		mixers, where the fifth mixer combines the outputs of the first 4.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioMixer4">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioPlayMemory">
@@ -862,12 +1544,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>TODO: ulaw vs uncompressed encoding</p>
 	<p>Polyphonic playback can be built by creating multiple
 		objects, with their output combined by mixers.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioPlayMemory">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioPlaySdWav">
@@ -924,12 +1600,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		dropouts or glitches.
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioPlaySdWav">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioPlaySdRaw">
 	<h3>Summary</h3>
@@ -976,12 +1646,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		Disabling the audio library interrupt for too long may cause audible
 		dropouts or glitches.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioPlaySdRaw">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioPlaySerialflashRaw">
@@ -1039,12 +1703,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 		not play, use <b>File &gt; Examples &gt; SerialFlash &gt; ListFiles</b> to
 		check the exact file names stored in the flash memory chip.
 </script>
-<script type="text/x-red" data-template-name="AudioPlaySerialflashRaw">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioPlayQueue">
 	<h3>Summary</h3>
@@ -1085,12 +1743,6 @@ span.mainfunction {color: #993300; font-weight: bolder}
 	<p>TODO: many caveats....</p>
 	<p>
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioPlayQueue">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioRecordQueue">
@@ -1142,12 +1794,6 @@ The actual packets are taken
 		from the pool created by AudioMemory().
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioRecordQueue">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioSynthWaveformSine">
 	<h3>Summary</h3>
@@ -1183,12 +1829,6 @@ The actual packets are taken
 	</p>
 	<h3>Notes</h3>
 	<p></p>
-</script>
-<script type="text/x-red" data-template-name="AudioSynthWaveformSine">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioSynthWaveformSineModulated">
@@ -1227,12 +1867,6 @@ The actual packets are taken
 -->
 	<h3>Notes</h3>
 	<p></p>
-</script>
-<script type="text/x-red" data-template-name="AudioSynthWaveformSineModulated">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioSynthWaveform">
@@ -1296,12 +1930,6 @@ The actual packets are taken
 		</ul>
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioSynthWaveform">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioSynthToneSweep">
 	<h3>Summary</h3>
@@ -1324,12 +1952,6 @@ The actual packets are taken
 	</p>
 	<h3>Notes</h3>
 	<p>Uses excessive CPU time</p>
-</script>
-<script type="text/x-red" data-template-name="AudioSynthToneSweep">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioSynthWaveformDc">
@@ -1363,12 +1985,6 @@ The actual packets are taken
 		to a pure digital stream of numerical values.  But the term is widely
 		understood in audio applications, so hopefully it's not too confusing?</p>
 </script>
-<script type="text/x-red" data-template-name="AudioSynthWaveformDc">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioSynthNoiseWhite">
 	<h3>Summary</h3>
@@ -1395,12 +2011,6 @@ The actual packets are taken
 	<p>Setting the amplitude to zero causes this object to stop using
 		CPU time to generate random numbers.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioSynthNoiseWhite">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioSynthNoisePink">
@@ -1435,12 +2045,6 @@ The actual packets are taken
 		algorithm.  Stefan's terms of use are "Use for any purpose. If used
 		in a commercial product, you should give me one."
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioSynthNoisePink">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectFade">
@@ -1479,12 +2083,6 @@ The actual packets are taken
 		settings on multiple objects, so all changes always take effect
 		at the same moment.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectFade">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectChorus">
@@ -1528,12 +2126,6 @@ The actual packets are taken
 	</p>
 	<h3>Notes</h3>
 	<p>The longer the length of the chorus, the more memory blocks are used.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectChorus">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectFlange">
@@ -1588,12 +2180,6 @@ and<br>
 int s_idx = 3*FLANGE_DELAY_LENGTH/4;<br>
 int s_depth = FLANGE_DELAY_LENGTH/8;<br>
 double s_freq = .0625;</p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectFlange">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectEnvelope">
@@ -1653,12 +2239,6 @@ double s_freq = .0625;</p>
 		milliseconds.  Up to 200 ms can be used, with somewhat reduced
 		accuracy</p>
 </script>
-<script type="text/x-red" data-template-name="AudioEffectEnvelope">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioEffectMultiply">
 	<h3>Summary</h3>
@@ -1688,12 +2268,6 @@ double s_freq = .0625;</p>
 	<h3>Notes</h3>
 	<p>
     </p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectMultiply">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectDelay">
@@ -1737,12 +2311,6 @@ double s_freq = .0625;</p>
 		Each block allows about 3 milliseconds of delay, so AudioMemory
 		should be increased to allow for the longest delay tap.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectDelay">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioEffectDelayExternal">
@@ -1840,12 +2408,6 @@ double s_freq = .0625;</p>
 	<p class=desc><span class=keyword>AudioEffectDelayExternal</span>  delayExt1(<span class=literal>AUDIO_MEMORY_23LC1024</span>, 700);<br><span class=keyword>AudioEffectDelayExternal</span>  delayExt2(<span class=literal>AUDIO_MEMORY_23LC1024</span>, 700);
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioEffectDelayExternal">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioEffectBitcrusher">
     <h3>Summary</h3>
@@ -1884,12 +2446,6 @@ double s_freq = .0625;</p>
         settings on multiple objects, so all changes always take effect
         at the same moment.
     </p>
-</script>
-<script type="text/x-red" data-template-name="AudioEffectBitcrusher">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioFilterBiquad">
@@ -1949,12 +2505,6 @@ double s_freq = .0625;</p>
 		filter should be used.
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioFilterBiquad">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioFilterFIR">
 	<h3>Summary</h3>
@@ -2000,12 +2550,6 @@ double s_freq = .0625;</p>
 		is 32 bits on Teensy 3.1.  Edit "int" to "short" for an array of 16 bit numbers,
 		and add "const" to avoid consuming extra RAM.
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioFilterFIR">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioFilterStateVariable">
@@ -2060,12 +2604,6 @@ double s_freq = .0625;</p>
 		object uses approximately 4% of the CPU time on Teensy 3.1.
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioFilterFIR">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzePeak">
 	<h3>Summary</h3>
@@ -2091,12 +2629,6 @@ double s_freq = .0625;</p>
 	</p>
 	<h3>Notes</h3>
 	<p></p>
-</script>
-<script type="text/x-red" data-template-name="AudioAnalyzePeak">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzeFFT256">
@@ -2156,12 +2688,6 @@ double s_freq = .0625;</p>
 		<li><span class=literal>AudioWindowTukey256</span></li>
 		</ul>
 	</p>
-</script>
-<script type="text/x-red" data-template-name="AudioAnalyzeFFT256">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzeFFT1024">
@@ -2226,12 +2752,6 @@ double s_freq = .0625;</p>
 		load more evenly over time....
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioAnalyzeFFT1024">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzeToneDetect">
 	<h3>Summary</h3>
@@ -2279,12 +2799,6 @@ double s_freq = .0625;</p>
 		interval (the configured number of cycles).  This behavior may
 		change in future versions, for a single true each time the signal
 		is detected, and then false for the remainder of that interval.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioAnalyzeToneDetect">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzeNoteFrequency">
@@ -2335,12 +2849,6 @@ double s_freq = .0625;</p>
 		<a href="https://github.com/duff2013/AudioTuner">AudioTuner project</a>.
 		Additional details and documentation may be found there.</p>
 </script>
-<script type="text/x-red" data-template-name="AudioAnalyzeNoteFrequency">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioAnalyzePrint">
 	<h3>Summary</h3>
@@ -2374,12 +2882,6 @@ double s_freq = .0625;</p>
 -->
 	<h3>Notes</h3>
 	<p>This object doesn't work very well and probably should not be used.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioAnalyzePrint">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 <script type="text/x-red" data-help-name="AudioControlSGTL5000">
@@ -2708,12 +3210,6 @@ value  frequency
 	<p>TODO: add example with two analogRead pots for bass and treble to demonstrate ramping.
 	</p>
 </script>
-<script type="text/x-red" data-template-name="AudioControlSGTL5000">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioControlWM8731">
 	<h3>Summary</h3>
@@ -2748,12 +3244,6 @@ value  frequency
 	<h3>Notes</h3>
 	<p></p>
 </script>
-<script type="text/x-red" data-template-name="AudioControlWM8731">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioControlWM8731master">
 	<h3>Summary</h3>
@@ -2786,16 +3276,10 @@ value  frequency
 	<h3>Notes</h3>
 	<p></p>
 </script>
-<script type="text/x-red" data-template-name="AudioControlWM8731master">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
-</script>
 
 <script type="text/x-red" data-help-name="AudioControlAK4558">
 	<h3>Summary</h3>
-	<p>Control the AK4558 chip on the <a href="https://hackaday.io/project/8567-hifi-audio-codec-module" target="_blank">HiFi Audio CODEC Module</a> 
+	<p>Control the AK4558 chip on the <a href="https://hackaday.io/project/8567-hifi-audio-codec-module" target="_blank">HiFi Audio CODEC Module</a>
 	in slave mode, where the Teensy controls all I2S timing.</p>
 	<h3>Audio Connections</h3>
 	<p>This object has no audio inputs or outputs.  Separate I2S objects
@@ -2844,12 +3328,6 @@ value  frequency
 	<p>TODO: Implement inputSelect() function to enable mono left, mono right, stereo operation.</p>
 	<p>TODO: Implement ADC and DAC filters control.</p>
 	<p>TODO: Implement DAC level attenuator attack rate modifier.</p>
-</script>
-<script type="text/x-red" data-template-name="AudioControlWM8731master">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-		<input type="text" id="node-input-name" placeholder="Name">
-	</div>
 </script>
 
 </body>

@@ -148,7 +148,6 @@ var RED = (function() {
 
 	$('#btn-deploy').click(function() { save(); });
 
-
 	$( "#node-dialog-confirm-deploy" ).dialog({
 			title: "Confirm deploy",
 			modal: true,
@@ -235,9 +234,11 @@ var RED = (function() {
 		var server = false && patt.test(location.protocol);
 
 		if (!server) {
+/*
 			var data = $.parseJSON($("script[data-container-name|='NodeDefinitions']").html());
 			var nodes = data["nodes"];
-			$.each(nodes, function (key, val) {
+*/
+			$.each(window.nodes, function (key, val) {
 				RED.nodes.registerType(val["type"], val["data"]);
 			});
 			RED.keyboard.add(/* ? */ 191, {shift: true}, function () {

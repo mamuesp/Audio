@@ -37,6 +37,7 @@ RED.editor = (function() {
 		if (oldValue != node.valid) {
 			node.dirty = true;
 		}
+		return node.valid;
 	}
 	
 	/**
@@ -70,7 +71,10 @@ RED.editor = (function() {
 			valid = value !== "";
 		}
 		if (valid && "validate" in definition[property]) {
-			valid = definition[property].validate.call(node,value);
+			var fn = definition[property].validate;
+			if(typeof fn === 'function') {
+				valid = fn(node, value, definition[property]);
+			}
 		}
 		if (valid && definition[property].type && RED.nodes.getType(definition[property].type) && !("validate" in definition[property])) {
 			if (!value || value == "_ADD_") {
@@ -114,9 +118,14 @@ RED.editor = (function() {
 		return removedLinks;
 	}
 
+	function initDialog(readOnly) {
+		var  dialogElem = $("#dialog");
 
+		if (readOnly) {
+			return dialogElem;
+		}
 
-	$( "#dialog" ).dialog({
+		return $(dialogElem).dialog({
 			modal: true,
 			autoOpen: false,
 			closeOnEscape: false,
@@ -125,6 +134,8 @@ RED.editor = (function() {
 				{
 					text: "Ok",
 					click: function() {
+						var valid = true;
+
 						if (editing_node) {
 							var changes = {};
 							var changed = false;
@@ -162,19 +173,25 @@ RED.editor = (function() {
 										}
 									}
 								}
-
-
 							}
 
 							if (editing_node._def.defaults) {
 								for (d in editing_node._def.defaults) {
 									if (editing_node._def.defaults.hasOwnProperty(d)) {
-										var input = $("#node-input-"+d);
+										var def = editing_node._def.defaults;
+										var inputType = def.hasOwnProperty("input") ? def.input : "text";
+										var input = $("#node-input-" + d);
 										var newValue;
 										if (input.attr('type') === "checkbox") {
-											newValue = input.prop('checked');
+											newValue = input.prop('checked') ? 1 : 0;
+										} else if (inputType === "select") {
+											newValue = input.val();
 										} else {
 											newValue = input.val();
+											// to avoid problems, we only use decimal points here
+											if ((/[0..9,]/).test(newValue)) {
+												newValue = newValue.replace(",", ".");
+											}
 										}
 										if (newValue != null) {
 											if (editing_node[d] != newValue) {
@@ -193,7 +210,6 @@ RED.editor = (function() {
 														configNode.users.push(editing_node);
 													}
 												}
-	
 												changes[d] = editing_node[d];
 												editing_node[d] = newValue;
 												changed = true;
@@ -209,7 +225,6 @@ RED.editor = (function() {
 								changed = changed || credsChanged;
 							}
 
-
 							var removedLinks = updateNodeProperties(editing_node);
 							if (changed) {
 								var wasChanged = editing_node.changed;
@@ -218,7 +233,7 @@ RED.editor = (function() {
 								RED.history.push({t:'edit',node:editing_node,changes:changes,links:removedLinks,dirty:wasDirty,changed:wasChanged});
 							}
 							editing_node.dirty = true;
-							validateNode(editing_node);
+							valid = validateNode(editing_node);
 							RED.view.redraw();
 						} else if (RED.view.state() == RED.state.EXPORT) {
 							if (/library/.test($( "#dialog" ).dialog("option","title"))) {
@@ -234,7 +249,9 @@ RED.editor = (function() {
 						} else if (RED.view.state() == RED.state.IMPORT) {
 							RED.view.importNodes($("#node-input-import").val());
 						}
+						if (valid) {
 						$( this ).dialog( "close" );
+					}
 					}
 				},
 				{
@@ -273,7 +290,10 @@ RED.editor = (function() {
 				RED.sidebar.config.refresh();
 				editing_node = null;
 			}
-	});
+		});
+	}
+
+	initDialog();
 
 	/**
 	 * Create a config-node select box for this property
@@ -287,7 +307,7 @@ RED.editor = (function() {
 
 		input.replaceWith('<select style="width: 60%;" id="node-input-'+property+'"></select>');
 		updateConfigNodeSelect(property,type,node[property]);
-		var select = $("#node-input-"+property);
+		var select = $("#node-input-" + property);
 		select.after(' <a id="node-input-lookup-'+property+'" class="btn"><i class="icon icon-pencil"></i></a>');
 		$('#node-input-lookup-'+property).click(function(e) {
 			showEditConfigNodeDialog(property,type,select.find(":selected").val());
@@ -311,10 +331,14 @@ RED.editor = (function() {
 	 * @param property - the name of the field
 	 * @param prefix - the prefix to use in the input element ids (node-input|node-config-input)
 	 */
-	function preparePropertyEditor(node,property,prefix) {
+	function preparePropertyEditor(node, property, prefix) {
 		var input = $("#"+prefix+"-"+property);
-		if (input.attr('type') === "checkbox") {
-			input.prop('checked',node[property]);
+		if (input.prop("tagName") === "SELECT") {
+			$(input).val(node[property]);
+		} else if (input.attr('type') === "checkbox") {
+			input.prop('checked', node[property]);
+		} else if (input.attr('type') === "textarea") {
+			input.text(node[property]);
 		} else {
 			var val = node[property];
 			if (val == null) {
@@ -456,10 +480,10 @@ RED.editor = (function() {
 	function showEditDialog(node) {
 		editing_node = node;
 		RED.view.state(RED.state.EDITING);
-		//$("#dialog-form").html(RED.view.getForm(node.type));
 		RED.view.getForm("dialog-form", node.type, function (d, f) {
-			prepareEditDialog(node,node._def,"node-input");
-			$( "#dialog" ).dialog("option","title","Edit "+node.type+" node").dialog( "open" );
+			var category = "input";
+			prepareEditDialog(node, node._def, "node-" + category);
+			initDialog().dialog("option","title","Edit " + node.type + " node").dialog("open");
 		});
 	}
 
@@ -481,7 +505,6 @@ RED.editor = (function() {
 			}
 		}
 
-		//$("#dialog-config-form").html(RED.view.getForm(type));
 		RED.view.getForm("dialog-config-form", type, function (d, f) {
 
 		prepareEditDialog(configNode,node_def,"node-config-input");
@@ -651,6 +674,7 @@ RED.editor = (function() {
 
 
 	return {
+		dialog: initDialog,
 		edit: showEditDialog,
 		editConfig: showEditConfigNodeDialog,
 		validateNode: validateNode,

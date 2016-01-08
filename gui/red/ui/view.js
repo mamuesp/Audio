@@ -1639,39 +1639,29 @@ RED.view = (function() {
 	$('#btn-export-clipboard').click(function() {showExportNodesDialog();});
 	$('#btn-export-library').click(function() {showExportNodesLibraryDialog();});
 
-	function showExportNodesDialog() {
-		mouse_mode = RED.state.EXPORT;
-		var nns = RED.nodes.createExportableNodeSet(moving_set);
-		//$("#dialog-form").html(getForm("dialog-form", "export-clipboard-dialog"));
-		var frm = getForm("dialog-form", "export-clipboard-dialog", function (d, f) {
-			$("#node-input-export").val(JSON.stringify(nns)).focus(function() {
-				var textarea = $(this);
-				textarea.select();
-				textarea.mouseup(function() {
-						textarea.unbind("mouseup");
-						return false;
-				});
-			}).focus();
-		$( "#dialog" ).dialog("option","title","Export nodes to clipboard").dialog( "open" );
-		});
+	function showExportNodesDialog(c) {
 	}
 
 	function showExportNodesLibraryDialog() {
 		mouse_mode = RED.state.EXPORT;
 		var nns = RED.nodes.createExportableNodeSet(moving_set);
-		//$("#dialog-form").html(this.getForm('export-library-dialog'));
 		getForm("dialog-form", "export-library-dialog", function(d, f) {
 		$("#node-input-filename").attr('nodes',JSON.stringify(nns));
-		$( "#dialog" ).dialog("option","title","Export nodes to library").dialog( "open" );
+			RED.editor.dialog(true).dialog("option","title","Export nodes to library").dialog( "open" );
 		});
 	}
 
 	function showImportNodesDialog() {
 		mouse_mode = RED.state.IMPORT;
+		RED.editor.dialog();
 		//$("#dialog-form").html(this.getForm('import-dialog'));
 		getForm("dialog-form", "import-dialog", function(d, f) {
 		$("#node-input-import").val("");
-		$( "#dialog" ).dialog("option","title","Import nodes").dialog( "open" );
+			RED.editor.dialog(true).dialog({
+				title: "Import from Arduino IDE",
+				width: 720,
+				position: { my: "center", at: "center", of: window }
+			}).dialog( "open" );
 		});
 	}
 
@@ -1700,7 +1690,52 @@ RED.view = (function() {
 		var form = $("<h2>No form found.</h2>");
 
 		if (!server) {
-			data = $("script[data-template-name|='" + key + "']").html();
+			var nn = RED.nodes.getType(key);
+			var category = "";
+			var data = "";
+
+			if (nn) {
+				category = "input";
+				data = $("script[data-template-name|='AudioDefault']").html();
+				var additional = "";
+				for (var prop in nn.defaults) {
+					if (nn.defaults.hasOwnProperty(prop)) {
+						var text = $("script[data-template-name|='AudioDefaultParameter']").html();
+						var select = $("script[data-template-name|='AudioSelectParameter']").html();
+						var currInput = "";
+						var entry = nn.defaults[prop];
+						if (entry) {
+							var label = entry.hasOwnProperty("label") ? entry.label : prop;
+							if (entry.hasOwnProperty("input")) {
+								var inputType = entry.input;
+								if (inputType === "text") {
+									currInput = text.replace(/###prop###/g, prop).replace(/###label###/g, label);
+								}
+								if (inputType === "display") {
+									currInput = text.replace(/###prop###/g, prop).replace(/###label###/g, label);
+									currInput = currInput.replace(/placeholder/, "readonly placeholder");
+								}
+								if (inputType === "select") {
+									var selData = (entry.hasOwnProperty("data") && typeof entry.data.isArray) ? entry.data : [];
+									var options = "";
+									for (var i = 0; i < selData.length; i++) {
+										options += "<option>" + selData[i].trim() + "</option>";
+									}
+									currInput = select.replace(/###prop###/g, prop).replace(/###OPTIONS###/g, options).replace(/###label###/g, label);
+								}
+							}
+							additional += currInput;
+						}
+					}
+				}
+				//additional += $("script[data-template-name|='" + key + "']").html();
+				if (typeof additional == "string") {
+					data = data.replace("</div>", additional + "</div>");
+				}
+			} else {
+				data = $("script[data-template-name|='" + key + "']").html();
+			}
+
 			form = $("#" + formId);
 			$(form).empty();
 			$(form).append(data);
@@ -1726,7 +1761,7 @@ RED.view = (function() {
 	$( "#node-dialog-rename-workspace" ).dialog({
 		modal: true,
 		autoOpen: false,
-		width: 500,
+		width: 600,
 		title: "Rename sheet",
 		buttons: [
 			{
@@ -1770,7 +1805,7 @@ RED.view = (function() {
 	$( "#node-dialog-delete-workspace" ).dialog({
 		modal: true,
 		autoOpen: false,
-		width: 500,
+		width: 600,
 		title: "Confirm delete",
 		buttons: [
 			{
@@ -1824,6 +1859,7 @@ RED.view = (function() {
 		showWorkspace: function(id) {
 			workspace_tabs.activateTab(id);
 		},
+		exportDialog: showExportNodesDialog,
 		redraw:redraw,
 		dirty: function(d) {
 			if (d == null) {
