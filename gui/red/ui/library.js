@@ -16,7 +16,6 @@
  **/
 RED.library = (function() {
 	
-	
 	function loadFlowLibrary() {
 		$.getJSON("library/flows",function(data) {
 			//console.log(data);
@@ -140,9 +139,7 @@ RED.library = (function() {
 			'<li><a id="node-input-'+options.type+'-menu-save-library" tabindex="-1" href="#">Save to Library...</a></li>'+
 			'</ul></div>'
 		);
-	
-		
-		
+
 		$('#node-input-'+options.type+'-menu-open-library').click(function(e) {
 			$("#node-select-library").children().remove();
 			var bc = $("#node-dialog-library-breadcrumbs");

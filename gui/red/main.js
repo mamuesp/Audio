@@ -14,86 +14,106 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-var RED = (function() {
+var RED = (function () {
 
-	$('#btn-keyboard-shortcuts').click(function(){showHelp();});
+	$('#btn-keyboard-shortcuts').click(function () {
+		showHelp();
+	});
 
-	function hideDropTarget() {
+	function hideDropTarget () {
 		$("#dropTarget").hide();
 		RED.keyboard.remove(/* ESCAPE */ 27);
 	}
 
-	$('#chart').on("dragenter",function(event) {
-		if ($.inArray("text/plain",event.originalEvent.dataTransfer.types) != -1) {
-			$("#dropTarget").css({display:'table'});
-			RED.keyboard.add(/* ESCAPE */ 27,hideDropTarget);
+	$('#chart').on("dragenter", function (event) {
+		if ($.inArray("text/plain", event.originalEvent.dataTransfer.types) != -1) {
+			$("#dropTarget").css({display: 'table'});
+			RED.keyboard.add(/* ESCAPE */ 27, hideDropTarget);
 		}
 	});
 
-	$('#dropTarget').on("dragover",function(event) {
-		if ($.inArray("text/plain",event.originalEvent.dataTransfer.types) != -1) {
+	$('#dropTarget').on("dragover", function (event) {
+			if ($.inArray("text/plain", event.originalEvent.dataTransfer.types) != -1) {
+				event.preventDefault();
+			}
+		})
+		.on("dragleave", function (event) {
+			hideDropTarget();
+		})
+		.on("drop", function (event) {
+			var data = event.originalEvent.dataTransfer.getData("text/plain");
+			hideDropTarget();
+			RED.view.importNodes(data);
 			event.preventDefault();
-		}
-	})
-	.on("dragleave",function(event) {
-		hideDropTarget();
-	})
-	.on("drop",function(event) {
-		var data = event.originalEvent.dataTransfer.getData("text/plain");
-		hideDropTarget();
-		RED.view.importNodes(data);
-		event.preventDefault();
-	});
+		});
 
-	function save(force) {
+	function save (force) {
 		RED.storage.update();
 
 		if (RED.nodes.hasIO()) {
 			var nns = RED.nodes.createCompleteNodeSet();
 			// sort by horizontal position, plus slight vertical position,
 			// for well defined update order that follows signal flow
-			nns.sort(function(a,b){ return (a.x + a.y/250) - (b.x + b.y/250); });
+			nns.sort(function (a, b) {
+				return (a.x + a.y / 250) - (b.x + b.y / 250);
+			});
 			//console.log(JSON.stringify(nns));
 
-			var cpp = "#include <Audio.h>\n#include <Wire.h>\n"
-				+ "#include <SPI.h>\n#include <SD.h>\n#include <SerialFlash.h>\n\n"
-				+ "// GUItool: begin automatically generated code\n";
+			var cppDecl =   "#include <Audio.h>\n" +
+							"#include <Wire.h>\n" +
+						    "#include <SPI.h>\n" +
+							"#include <SD.h>\n" +
+							"#include <SerialFlash.h>\n\n" +
+							"// GUItool: begin automatically generated code\n";
+			var cppInit = "\nvoid setup() {\n";
 			// generate code for all audio processing nodes
-			for (var i=0; i<nns.length; i++) {
+			for (var i = 0; i < nns.length; i++) {
 				var n = nns[i];
 				var node = RED.nodes.node(n.id);
 				if (node && (node.outputs > 0 || node._def.inputs > 0)) {
-					cpp += n.type + " ";
-					for (var j=n.type.length; j<24; j++) cpp += " ";
-					var name = (n.name ? n.name : n.id);
-					name = name.replace(" ", "_").replace("+", "_").replace("-", "_");
-					cpp += name + "; ";
-					for (var j=n.id.length; j<14; j++) cpp += " ";
-					cpp += "//xy=" + n.x + "," + n.y + "\n";
+					if ($.isFunction(node.getSource)) {
+						var out = node.getSource(node);
+						cppDecl += out.decl;
+						cppInit += out.src;
+					} else {
+						cppDecl += n.type + " ";
+						for (var j = n.type.length; j < 24; j++) {
+							cppDecl += " ";
+						}
+						var name = (n.name ? n.name : n.id);
+						name = name.replace(" ", "_").replace("+", "_").replace("-", "_");
+						cppDecl += name + "; ";
+						for (var j = n.id.length; j < 14; j++) {
+							cppDecl += " ";
+						}
+						cppDecl += "//xy=" + n.x + "," + n.y + "\n";
+					}
 				}
 			}
 			// generate code for all connections (aka wires or links)
 			var cordcount = 1;
-			for (var i=0; i<nns.length; i++) {
+			for (var i = 0; i < nns.length; i++) {
 				var n = nns[i];
 				if (n.wires) {
-					for (var j=0; j<n.wires.length; j++) {
+					for (var j = 0; j < n.wires.length; j++) {
 						var wires = n.wires[j];
-						if (!wires) continue;
-						for (var k=0; k<wires.length; k++) {
+						if (!wires) {
+							continue;
+						}
+						for (var k = 0; k < wires.length; k++) {
 							var wire = n.wires[j][k];
 							if (wire) {
 								var parts = wire.split(":");
 								if (parts.length == 2) {
-									cpp += "AudioConnection          patchCord" + cordcount + "(";
+									cppDecl += "AudioConnection          patchCord" + cordcount + "(";
 									var src = RED.nodes.node(n.id);
 									var dst = RED.nodes.node(parts[0]);
 									if (j == 0 && parts[1] == 0 && src && src.outputs == 1 && dst && dst._def.inputs == 1) {
-										cpp += n.id + ", " + parts[0];
+										cppDecl += n.id + ", " + parts[0];
 									} else {
-										cpp += n.id + ", " + j + ", " + parts[0] + ", " + parts[1];
+										cppDecl += n.id + ", " + j + ", " + parts[0] + ", " + parts[1];
 									}
-									cpp += ");\n";
+									cppDecl += ");\n";
 									cordcount++;
 								}
 							}
@@ -102,113 +122,127 @@ var RED = (function() {
 				}
 			}
 			// generate code for all control nodes (no inputs or outputs)
-			for (var i=0; i<nns.length; i++) {
+			for (var i = 0; i < nns.length; i++) {
 				var n = nns[i];
 				var node = RED.nodes.node(n.id);
 				if (node && node.outputs == 0 && node._def.inputs == 0) {
-					cpp += n.type + " ";
-					for (var j=n.type.length; j<24; j++) cpp += " ";
-					cpp += n.id + "; ";
-					for (var j=n.id.length; j<14; j++) cpp += " ";
-					cpp += "//xy=" + n.x + "," + n.y + "\n";
+					cppDecl += n.type + " ";
+					for (var j = n.type.length; j < 24; j++) {
+						cppDecl += " ";
+					}
+					cppDecl += n.id + "; ";
+					for (var j = n.id.length; j < 14; j++) {
+						cppDecl += " ";
+					}
+					cppDecl += "//xy=" + n.x + "," + n.y + "\n";
 				}
 			}
-			cpp += "// GUItool: end automatically generated code\n";
+			cppInit += "}\n\n";
+			var cpp = cppDecl + cppInit + "// GUItool: end automatically generated code\n";
 			//console.log(cpp);
 
 			RED.view.state(RED.state.EXPORT);
 			RED.view.getForm('dialog-form', 'export-clipboard-dialog', function (d, f) {
-				$("#node-input-export").val(cpp).focus(function() {
-				var textarea = $(this);
-				textarea.select();
-				textarea.mouseup(function() {
-					textarea.unbind("mouseup");
-					return false;
-				});
+				$("#node-input-export").val(cpp).focus(function () {
+					var textarea = $(this);
+					textarea.select();
+					textarea.mouseup(function () {
+						textarea.unbind("mouseup");
+						return false;
+					});
 				}).focus();
-			$( "#dialog" ).dialog("option","title","Export to Arduino").dialog( "open" );
+				$("#dialog").dialog("option", "title", "Export to Arduino").dialog("open");
 			});
 			//RED.view.dirty(false);
 		} else {
-			$( "#node-dialog-error-deploy" ).dialog({
-				title: "Error exporting data to Arduino IDE",
-				modal: true,
+			$("#node-dialog-error-deploy").dialog({
+				title:    "Error exporting data to Arduino IDE",
+				modal:    true,
 				autoOpen: false,
-				width: 410,
-				height: 245,
-				buttons: [{
-					text: "Ok",
-					click: function() {
-						$( this ).dialog( "close" );
+				width:    410,
+				height:   245,
+				buttons:  [{
+					text:  "Ok",
+					click: function () {
+						$(this).dialog("close");
 					}
 				}]
 			}).dialog("open");
 		}
 	}
 
-	$('#btn-deploy').click(function() { save(); });
+	$('#btn-deploy').click(function () {
+		save();
+	});
 
-	$( "#node-dialog-confirm-deploy" ).dialog({
-			title: "Confirm deploy",
-			modal: true,
-			autoOpen: false,
-			width: 530,
-			height: 230,
-			buttons: [
-				{
-					text: "Confirm deploy",
-					click: function() {
-						save(true);
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "Cancel",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
+	$("#node-dialog-confirm-deploy").dialog({
+		title:    "Confirm deploy",
+		modal:    true,
+		autoOpen: false,
+		width:    530,
+		height:   230,
+		buttons:  [
+			{
+				text:  "Confirm deploy",
+				click: function () {
+					save(true);
+					$(this).dialog("close");
 				}
-			]
+			},
+			{
+				text:  "Cancel",
+				click: function () {
+					$(this).dialog("close");
+				}
+			}
+		]
 	});
 
 	// from http://css-tricks.com/snippets/javascript/get-url-variables/
-	function getQueryVariable(variable) {
+	function getQueryVariable (variable) {
 		var query = window.location.search.substring(1);
 		var vars = query.split("&");
-		for (var i=0;i<vars.length;i++) {
+		for (var i = 0; i < vars.length; i++) {
 			var pair = vars[i].split("=");
-			if(pair[0] == variable){return pair[1];}
-		}
-		return(false);
-	}
-
-	function loadNodes() {
-			$(".palette-scroll").show();
-			$("#palette-search").show();
-			RED.storage.load();
-			RED.view.redraw();
-			setTimeout(function() {
-				$("#btn-deploy").removeClass("disabled").addClass("btn-danger");
-				$("#btn-import").removeClass("disabled").addClass("btn-success");
-			}, 1500);
-			$('#btn-deploy').click(function() { save(); });
-			// if the query string has ?info=className, populate info tab
-			var info = getQueryVariable("info");
-			if (info) {
-				RED.sidebar.info.setHelpContent('', info);
+			if (pair[0] == variable) {
+				return pair[1];
 			}
+		}
+		return (false);
 	}
 
-	$('#btn-node-status').click(function() {toggleStatus();});
+	function loadNodes () {
+		$(".palette-scroll").show();
+		$("#palette-search").show();
+		RED.storage.load();
+		RED.view.redraw();
+		setTimeout(function () {
+			$("#btn-deploy").removeClass("disabled").addClass("btn-danger");
+			$("#btn-import").removeClass("disabled").addClass("btn-success");
+		}, 1500);
+		$('#btn-deploy').click(function () {
+			save();
+		});
+		// if the query string has ?info=className, populate info tab
+		var info = getQueryVariable("info");
+		if (info) {
+			RED.sidebar.info.setHelpContent('', info);
+		}
+	}
+
+	$('#btn-node-status').click(function () {
+		toggleStatus();
+	});
 
 	var statusEnabled = false;
-	function toggleStatus() {
+
+	function toggleStatus () {
 		var btnStatus = $("#btn-node-status");
 		statusEnabled = btnStatus.toggleClass("active").hasClass("active");
 		RED.view.status(statusEnabled);
 	}
-	
-	function showHelp() {
+
+	function showHelp () {
 
 		var dialog = $('#node-help');
 
@@ -216,55 +250,30 @@ var RED = (function() {
 		//        handle: ".modal-header"
 		//});
 
-		dialog.on('show',function() {
+		dialog.on('show', function () {
 			RED.keyboard.disable();
 		});
-		dialog.on('hidden',function() {
+		dialog.on('hidden', function () {
 			RED.keyboard.enable();
 		});
 
 		dialog.modal();
 	}
 
-	$(function() {
-		$(".palette-spinner").show();
+	$(function () {
+		var spin = $(".palette-spinner");
+		spin.show();
 
-		// server test switched off - test purposes only
-		var patt = new RegExp(/^[http|https]/);
-		var server = false && patt.test(location.protocol);
-
-		if (!server) {
-/*
-			var data = $.parseJSON($("script[data-container-name|='NodeDefinitions']").html());
-			var nodes = data["nodes"];
-*/
-			$.each(window.nodes, function (key, val) {
-				RED.nodes.registerType(val["type"], val["data"]);
-			});
-			RED.keyboard.add(/* ? */ 191, {shift: true}, function () {
+		$.each(window.nodes, function (key, val) {
+			RED.nodes.registerType(val["type"], val["data"]);
+		});
+		RED.keyboard.add(/* ? */ 191, {shift: true}, function () {
 				showHelp();
 				d3.event.preventDefault();
 			});
-			loadNodes();
-			$(".palette-spinner").hide();
-		} else {
-			$.ajaxSetup({beforeSend: function(xhr){
-				if (xhr.overrideMimeType) {
-					xhr.overrideMimeType("application/json");
-				}
-			}});
-			$.getJSON( "resources/nodes_def.json", function( data ) {
-				var nodes = data["nodes"];
-				$.each(nodes, function(key, val) {
-					RED.nodes.registerType(val["type"], val["data"]);
-				});
-				RED.keyboard.add(/* ? */ 191,{shift:true},function(){showHelp();d3.event.preventDefault();});
-				loadNodes();
-				$(".palette-spinner").hide();
-			})
-		}
+		loadNodes();
+		spin.hide();
 	});
 
-	return {
-	};
+	return {};
 })();

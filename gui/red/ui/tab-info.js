@@ -69,9 +69,11 @@ RED.sidebar.info = (function() {
 						val += "&nbsp;... "+node[n].length+" items<br/>";
 					}
 					val += "]";
+				} else if (type == "function") {
+					continue;
 				} else {
 					val = JSON.stringify(val,jsonFilter," ");
-					val = val.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+					val = val ? val.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") : "n.a.";
 				}
 				
 				table += "<tr><td>&nbsp;"+n+"</td><td>"+val+"</td></tr>";

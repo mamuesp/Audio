@@ -19,12 +19,16 @@ var nodes = {
 		"type": "AudioInputAnalog",
 		"data": {
 			"defaults":  {
-				"name": {
+				"name":      {
 					"value": "adc"
 				},
-				"pin":  {
+				"getSource": {
+					"value": RED.generators.getSrcNoName
+				},
+				"pin":       {
 					"value": "A2",
-					"call":  "(###pin###)"
+					"input": "text",
+					"label": "Pin"
 				}
 			},
 			"shortName": "adc",
@@ -118,22 +122,17 @@ var nodes = {
 				"name":  {
 					"value": "mixer"
 				},
-				"gain0": {
-					"value": 0.25,
-					"call":  ".gain(0, ###gain0###)"
+				"getSource": {
+					"value": RED.generators.getSrcIndexed
 				},
-				"gain1": {
-					"value": 0.25,
-					"call":  ".gain(1, ###gain1###)"
+				"gain": {
+					"value":    [0.25, 0.25, 0.25, 0.25],
+					"validate": RED.nodes.isValidRange,
+					"min":      0.0,
+					"max":      1.0,
+					"input":    "text-array",
+					"label":    "Gain chan."
 				},
-				"gain2": {
-					"value": 0.25,
-					"call":  ".gain(2, ###gain2###)"
-				},
-				"gain3": {
-					"value": 0.25,
-					"call":  ".gain(3, ###gain3###)"
-				}
 			},
 			"shortName": "mixer",
 			"inputs":    4,
@@ -220,25 +219,31 @@ var nodes = {
 		"data": {
 			"defaults":  {
 				"name":      {
-					"value": "new"
+					"value": "sine"
 				},
 				"amplitude": {
 					"value":    "0.5",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      1
+					"max":      1,
+					"input":    "text",
+					"label":    "Amplitude"
 				},
 				"frequency": {
-					"value": "1000",
+					"value":    "1000",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      22000
+					"max":      22000,
+					"input":    "text",
+					"label":    "Frequency"
 				},
 				"phase":     {
-					"value": "0",
+					"value":    "0",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      360
+					"max":      360,
+					"input":    "text",
+					"label":    "Phase"
 				}
 			},
 			"shortName": "sine",
@@ -254,25 +259,31 @@ var nodes = {
 		"data": {
 			"defaults":  {
 				"name":      {
-					"value": "new"
+					"value": "sine_fm"
 				},
 				"amplitude": {
-					"value":    0.5,
+					"value":    "0.5",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      1
+					"max":      1,
+					"input":    "text",
+					"label":    "Amplitude"
 				},
 				"frequency": {
-					"value": 	1000,
+					"value":    "1000",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      11000
+					"max":      22000,
+					"input":    "text",
+					"label":    "Frequency"
 				},
 				"phase":     {
-					"value": 	0,
+					"value":    "0",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      360
+					"max":      360,
+					"input":    "text",
+					"label":    "Phase"
 				}
 			},
 			"shortName": "sine_fm",
@@ -287,26 +298,41 @@ var nodes = {
 		"type": "AudioSynthWaveform",
 		"data": {
 			"defaults":  {
-				"name": {
+				"name":      {
 					"value": "new"
 				},
-				"amplitude": {
-					"value":    0.5,
+				"waveform":  {
+					"value":    0,
+					"data":     ["WAVEFORM_SINE", "WAVEFORM_SAWTOOTH", "WAVEFORM_SAWTOOTH_REVERSE", "WAVEFORM_SQUARE", "WAVEFORM_TRIANGLE", "WAVEFORM_ARBITRARY", "WAVEFORM_PULSE", "WAVEFORM_SAMPLE_HOLD"],
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      1
+					"max":      7,
+					"input":    "select",
+					"label":    "Waveform"
+				},
+				"amplitude": {
+					"value":    "0.5",
+					"validate": RED.nodes.isValidRange,
+					"min":      0,
+					"max":      1,
+					"input":    "text",
+					"label":    "Amplitude"
 				},
 				"frequency": {
-					"value": 	1000,
+					"value":    "1000",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      22000
+					"max":      22000,
+					"input":    "text",
+					"label":    "Frequency"
 				},
 				"phase":     {
-					"value": 	0,
+					"value":    "0",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      360
+					"max":      360,
+					"input":    "text",
+					"label":    "Phase"
 				}
 			},
 			"shortName": "waveform",
@@ -333,22 +359,25 @@ var nodes = {
 		"type": "AudioSynthWaveformDc",
 		"data": {
 			"defaults":  {
-				"name": {
+				"name":      {
 					"value": "new"
 				},
 				"amplitude": {
-					"value":    1,
+					"value":    "0.5",
 					"validate": RED.nodes.isValidRange,
-					"min":      -1,
+					"min":      0,
 					"max":      1,
-					"call":  ".amplitude(###amplitude###, ###period###)"
+					"input":    "text",
+					"label":    "Amplitude"
 				},
-				"period": {
-					"value": 	10,
+				"period":    {
+					"value":    "10",
+					"call":     "insert",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
 					"max":      100000,
-					"call":  "insert"
+					"input":    "text",
+					"label":    "Period"
 				}
 			},
 			"shortName": "dc",
@@ -363,14 +392,16 @@ var nodes = {
 		"type": "AudioSynthNoiseWhite",
 		"data": {
 			"defaults":  {
-				"name": {
+				"name":      {
 					"value": "new"
 				},
 				"amplitude": {
-					"value":    0.5,
+					"value":    "0.5",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      1
+					"max":      1,
+					"input":    "text",
+					"label":    "Amplitude"
 				}
 			},
 			"shortName": "noise",
@@ -385,14 +416,16 @@ var nodes = {
 		"type": "AudioSynthNoisePink",
 		"data": {
 			"defaults":  {
-				"name": {
+				"name":      {
 					"value": "new"
 				},
 				"amplitude": {
-					"value":    0.5,
+					"value":    "0.5",
 					"validate": RED.nodes.isValidRange,
 					"min":      0,
-					"max":      1
+					"max":      1,
+					"input":    "text",
+					"label":    "Amplitude"
 				}
 			},
 			"shortName": "pink",
@@ -489,12 +522,25 @@ var nodes = {
 	},
 	"AudioEffectBitcrusher":           {
 		"type": "AudioEffectBitcrusher",
-		"data": {"shortName": "bitcrusher", "inputs": 1, "outputs": 1, "category": "effect-function", "color": "#E6E0F8", "icon": "arrow-in.png"}
+		"data": {
+			"defaults":  {"name": {"value": "new"}},
+			"shortName": "bitcrusher",
+			"inputs":    1,
+			"outputs":   1,
+			"category":  "effect-function",
+			"color":     "#E6E0F8",
+			"icon":      "arrow-in.png"
+		}
 	},
 	"AudioFilterBiquad":               {
 		"type": "AudioFilterBiquad",
 		"data": {
-			"defaults":  {"name": {"value": "new"}},
+			"defaults":  {
+				"name": {
+					"value": "new"
+				},
+				type
+			},
 			"shortName": "biquad",
 			"inputs":    1,
 			"outputs":   1,
@@ -612,10 +658,43 @@ var nodes = {
 			"icon":      "arrow-in.png"
 		}
 	},
-	"AudioControlAK4558": {
+	"AudioControlAK4558":              {
 		"type": "AudioControlAK4558",
 		"data": {
-			"defaults":  {"name": {"value": "new"}},
+			"defaults":  {
+				"name":        {
+					"value": "new"
+				},
+				"volume":      {
+					"value":    0.25,
+					"validate": RED.nodes.isValidRange,
+					"min":      0.0,
+					"max":      1.0,
+					"input":    "text",
+					"label":    "Volume"
+				},
+				"volumeLeft":  {
+					"value":    0.25,
+					"validate": RED.nodes.isValidRange,
+					"min":      0.0,
+					"max":      1.0,
+					"input":    "text",
+					"label":    "Left volume"
+				},
+				"volumeRight": {
+					"value":    0.25,
+					"validate": RED.nodes.isValidRange,
+					"min":      0.0,
+					"max":      1.0,
+					"input":    "text",
+					"label":    "Right volume"
+				},
+				"inputSelect": {
+					"value": "n.a.",
+					"input": "display",
+					"label": "Input select"
+				}
+			},
 			"shortName": "ak4558",
 			"inputs":    0,
 			"outputs":   0,

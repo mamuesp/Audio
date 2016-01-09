@@ -14,6 +14,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+
+var tabs = ["                          ","              ","    "];
+
+RED.tools = {
+
+	getName: function (node) {
+		return (node.name ? node.name : (node.shortName ? node.shortName : node.id));
+	},
+
+	padString: function (pad, str, leftPadded) {
+		if (str == undefined) return pad;
+		if (leftPadded) {
+			return (pad + str).slice(-pad.length);
+		} else {
+			return (str + pad).substring(0, pad.length);
+		}
+	},
+
+	getDeclaration: function (node) {
+		return RED.tools.padString(tabs[0], node.type) + RED.tools.padString(tabs[1], RED.tools.getName(node) + ";") + "//xy=" + node.x + "," + node.y + "\n";
+	}
+};
+
+RED.generators = {
+
+	getSrcDefault: function (node) {
+		var params = node._def.defaults;
+		var parent = node;
+		var src = "";
+		$.each(params, function (name, param) {
+			if (name !== "name" && name !== "getSource" && parent.hasOwnProperty(name)) {
+				var value = (typeof parent[name] === "undefined") ? params[name].value : parent[name];
+				src += tabs[2] + RED.tools.getName(node) + "." + name + "(" + value + ");" + "\n";
+			}
+		});
+		return {"decl": RED.tools.getDeclaration(node), "src": src};
+	},
+
+	getSrcIndexed: function (node) {
+		var params = node._def.defaults;
+		var parent = node;
+		var src = "";
+		$.each(params, function (name, param) {
+			if (name !== "name" && name !== "getSource" && parent.hasOwnProperty(name)) {
+				if ($.isArray(params[name].value)) {
+					for (var idx = 0; idx < params[name].value.length; idx++ ) {
+						var value = (typeof parent[name] === "undefined") ? params[name].value[idx] : parent[name][idx];
+						src += tabs[2] + RED.tools.getName(node) + "." + name + "(" + idx + ", " + value + ");" + "\n";
+					}
+				}
+			}
+		});
+		return {"decl": RED.tools.getDeclaration(node), "src": src};
+	},
+
+	getSrcNoName: function (node) {
+		var params = node._def.defaults;
+		var parent = node;
+		var src = "";
+		$.each(params, function (name, param) {
+			if (name !== "name" && name !== "getSource" && parent.hasOwnProperty(name)) {
+				var value = (typeof $(parent[name]).val() === "undefined") ? params[name].value : $(parent[name]).val();
+				src += tabs[2] + RED.tools.getName(node) + "(" + value + ");" + "\n";
+			}
+		});
+		return {"decl": RED.tools.getDeclaration(node), "src": src};
+	}
+};
+
 RED.nodes = (function() {
 
 	var node_defs = {};
@@ -645,7 +714,9 @@ RED.nodes = (function() {
 
 						for (var d2 in node._def.defaults) {
 							if (node._def.defaults.hasOwnProperty(d2)) {
-								node[d2] = n[d2];
+								// JSON won't store function references,
+								// so we have to get them from the defaults
+								node[d2] = n[d2] ? n[d2] : node._def.defaults[d2].value;
 							}
 						}
 
@@ -683,7 +754,26 @@ RED.nodes = (function() {
 
 	}
 
+	var isValidNumber = function (node, value, property) {
+		return $.isNumeric(value);
+	};
+
+	var isValidRange = function (node, value, property) {
+		var arrVal = value;
+		var valid = true;
+		if ($.isArray(arrVal)) {
+			for (var idx = 0; idx < arrVal.length; idx++) {
+				valid &= (arrVal[idx] >= property.min) && (arrVal[idx] <= property.max);
+			}
+		} else {
+			valid = (value >= property.min) && (value <= property.max);
+		}
+		return valid;
+	};
+
 	return {
+		isValidNumber: isValidNumber,
+		isValidRange: isValidRange,
 		registerType: registerType,
 		getType: getType,
 		convertNode: convertNode,
